@@ -3,7 +3,7 @@ config:
 	kubectl create configmap app-tester-src --from-file ./src
 
 golang:
-	helm upgrade -i app-tester ./app-tester --set
+	helm upgrade -i app-tester ./app-tester --set image=golang
 
 cleanup:
 	helm delete app-tester
