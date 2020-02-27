@@ -2,9 +2,9 @@
 
 ## How to use
 
-Write your code under `./src`.
+Write your code under `./dist`.
 
-Add a file named `run` under `./src`. Which will compile and run your source code.
+Add a file named `run` under `./dist`. Which will compile and run your source code.
 
 Example:
 

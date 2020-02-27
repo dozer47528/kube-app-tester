@@ -16,16 +16,16 @@ spec:
         {{- include "app-tester.selectorLabels" . | nindent 8 }}
     spec:
       volumes:
-        - name: src-volume
+        - name: dist-volume
           configMap:
-            name: app-tester-src
+            name: app-tester-dist
             defaultMode: 0777
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image }}"
-          workingDir: "/src"
+          workingDir: "/dist"
           command: ["./run"]
           ports:
             - name: http
@@ -42,8 +42,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - mountPath: /src
-              name: src-volume
+            - mountPath: /dist
+              name: dist-volume
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

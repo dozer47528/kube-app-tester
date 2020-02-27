@@ -1,12 +1,12 @@
 config:
-	kubectl delete configmap app-tester-src || true
-	kubectl create configmap app-tester-src --from-file ./src
+	kubectl delete configmap app-tester-dist || true
+	kubectl create configmap app-tester-dist --from-file ./dist
 
 golang:
 	helm upgrade -i app-tester ./app-tester --set image=golang
 
-java:
-	helm upgrade -i app-tester ./app-tester --set image=maven
+java8:
+	helm upgrade -i app-tester ./app-tester --set image=openjdk:8
 
 python2:
 	helm upgrade -i app-tester ./app-tester --set image=python:2.7
@@ -16,4 +16,4 @@ python3:
 
 cleanup:
 	helm delete app-tester
-	kubectl delete configmap app-tester-src
+	kubectl delete configmap app-tester-dist
