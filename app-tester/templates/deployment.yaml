@@ -20,18 +20,31 @@ spec:
           configMap:
             name: app-tester-dist
             defaultMode: 0777
+        - name: gocache-volume
+          hostPath:
+            path: /tmp/gocache/
+            type: DirectoryOrCreate
+        - name: java-volume
+          hostPath:
+            path: /tmp/java/
+            type: DirectoryOrCreate
+        - name: mvn-volume
+          hostPath:
+            path: /tmp/.m2/
+            type: DirectoryOrCreate
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image }}"
-          workingDir: "/dist"
-          command: ["./run"]
+          workingDir: "/"
+          command: ["/bin/sh", "-c"]
+          args: ["tar -zxvf dist.tar.gz && cd /dist && ./run"]
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           livenessProbe:
+            periodSeconds: 15
+            failureThreshold: 20 
             httpGet:
               path: /health-check
               port: http
@@ -41,9 +54,19 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: GOCACHE
+              value: /tmp/gocache
           volumeMounts:
-            - mountPath: /dist
+            - mountPath: /dist.tar.gz
               name: dist-volume
+              subPath: dist.tar.gz
+            - mountPath: /tmp/gocache/
+              name: gocache-volume
+            - mountPath: /root/.m2/
+              name: mvn-volume
+            - mountPath: /tmp/java/
+              name: java-volume
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
