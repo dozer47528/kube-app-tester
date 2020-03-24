@@ -9,6 +9,9 @@ golang:
 openjdk8:
 	helm upgrade -i app-tester ./app-tester --set replicaCount=1 --set image=openjdk:8 --set resources.limits.memory=1Gi --set resources.limits.cpu=0.5
 
+openjdk13:
+	helm upgrade -i app-tester ./app-tester --set replicaCount=1 --set image=openjdk:13 --set resources.limits.memory=1Gi --set resources.limits.cpu=0.5
+
 openjdk8-openj9:
 	helm upgrade -i app-tester ./app-tester --set replicaCount=1 --set image=adoptopenjdk/openjdk8-openj9 --set resources.limits.memory=1Gi --set resources.limits.cpu=0.5
 
